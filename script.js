@@ -26,6 +26,8 @@ rads.onchange = userDuration
 var startButton = document.getElementById('start-pause')
 
 startButton.onclick = () => timer(userDuration())
+startButton.ontouchstart = () => timer(userDuration())
+
 
 var getTimeInSeconds = function(){
   var currentTime = new Date()
@@ -44,7 +46,13 @@ var timer = function(duration){
   var endTime = startTime + (duration/1000)
 
   startButton.onclick = () => running = !running
+  startButton.ontouchstart = () => running = !running
+  
   resetButton.onclick = function() {
+    reset = true
+    resetSession()
+  }
+  resetButton.ontouchstart = function() {
     reset = true
     resetSession()
   }
@@ -54,6 +62,7 @@ var timer = function(duration){
     startButton.innerHTML = 'start'
     displayText('restart')
     startButton.onclick = () => timer(userDuration())
+    startButton.ontouchstart = () => timer(userDuration())
   }
 
   
@@ -66,6 +75,7 @@ var timer = function(duration){
       startButton.innerHTML = 'start'
       var remainingTime = ( endTime - currentTime + 1 ) * 1000
       startButton.onclick = () => timer(remainingTime)
+      startButton.ontouchstart = () => timer(remainingTime)
       return null
     }
 
@@ -87,6 +97,8 @@ var timer = function(duration){
       
       window.clearInterval(timerInterval)
       startButton.onclick = () => timer(userDuration())
+      startButton.ontouchstart = () => timer(userDuration())
+      
       return null
     }
   } , 1000)
