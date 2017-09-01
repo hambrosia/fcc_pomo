@@ -1,0 +1,31 @@
+body{
+    padding-top: 20px;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 24px;
+}
+
+h1{
+    color: crimson;
+}
+
+button{
+    font-size: 18px;
+}
+
+
+input[type=radio]:not(old){
+    width   : 28px;
+    margin  : 20px;
+    padding : 10px;
+    opacity : 1;
+  }
+
+  #pomo-display{
+      border-style: dashed;
+      border-color: crimson;
+      margin: auto;
+      width: 350px;
+      background-color: whitesmoke;
+      padding: 20px;
+  }
