@@ -26,7 +26,11 @@ rads.onchange = userDuration
 var startButton = document.getElementById('start-pause')
 
 startButton.onclick = () => timer(userDuration())
-startButton.ontouchstart = () => timer(userDuration())
+startButton.addEventListener('touchstart', startTimer , false )
+
+var startTimer = function(){
+  timer(userDuration())
+}
 
 
 var getTimeInSeconds = function(){
@@ -46,23 +50,27 @@ var timer = function(duration){
   var endTime = startTime + (duration/1000)
 
   startButton.onclick = () => running = !running
-  startButton.ontouchstart = () => running = !running
+  startButton.addEventListener('touchstart', () => running = !running, false )
   
   resetButton.onclick = function() {
     reset = true
     resetSession()
   }
-  resetButton.ontouchstart = function() {
+
+  resetButton.addEventListener('touchstart', function() {
     reset = true
     resetSession()
-  }
+  } , false )
+  
+
+
   //RESET
   var resetSession = function(){
     window.clearInterval(timerInterval)      
     startButton.innerHTML = 'start'
     displayText('restart')
     startButton.onclick = () => timer(userDuration())
-    startButton.ontouchstart = () => timer(userDuration())
+    startButton.addEventListener('touchstart',startTimer, false )
   }
 
   
@@ -75,8 +83,12 @@ var timer = function(duration){
       startButton.innerHTML = 'start'
       var remainingTime = ( endTime - currentTime + 1 ) * 1000
       startButton.onclick = () => timer(remainingTime)
-      startButton.ontouchstart = () => timer(remainingTime)
+      startButton.addEventListener('click', timerRemainingTime, false)
       return null
+    }
+
+    var timerRemainingTime = function(){
+      timer(remainingTime)
     }
 
     displayCountdown(endTime)
@@ -97,7 +109,7 @@ var timer = function(duration){
       
       window.clearInterval(timerInterval)
       startButton.onclick = () => timer(userDuration())
-      startButton.ontouchstart = () => timer(userDuration())
+      startButton.addEventListener('touchstart', startTimer, false )
       
       return null
     }
