@@ -118,7 +118,7 @@ var beep = function(){
 
 var toHourMin = function(secondsWorked){
   var hours = Math.floor(secondsWorked / 3600)
-  var minutes = Math.floor(secondsWorked % 3600)
+  var minutes = Math.floor(secondsWorked % 3600) / 60
   var time = ''
 
   if (minutes < 10){
