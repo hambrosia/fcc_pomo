@@ -26,7 +26,7 @@ rads.onchange = userDuration
 var startButton = document.getElementById('start-pause')
 
 startButton.onclick = () => timer(userDuration())
-startButton.addEventListener('touchstart', startTimer , false )
+startButton.addEventListener('touchend', startTimer , false )
 
 var startTimer = function(){
   timer(userDuration())
@@ -45,7 +45,6 @@ var timer = function(duration){
   startButton.innerHTML = 'pause'  
   
   var running = true
-  var reset = false
   var startTime = getTimeInSeconds()
   var endTime = startTime + (duration/1000)
 
@@ -53,16 +52,12 @@ var timer = function(duration){
   startButton.addEventListener('touchstart', () => running = !running, false )
   
   resetButton.onclick = function() {
-    reset = true
     resetSession()
   }
 
   resetButton.addEventListener('touchstart', function() {
-    reset = true
     resetSession()
   } , false )
-  
-
 
   //RESET
   var resetSession = function(){
@@ -123,7 +118,7 @@ var beep = function(){
 
 var toHourMin = function(secondsWorked){
   var hours = Math.floor(secondsWorked / 3600)
-  var minutes = Math.floor(secondsWorked / 60)
+  var minutes = Math.floor(secondsWorked % 3600)
   var time = ''
 
   if (minutes < 10){
@@ -155,11 +150,3 @@ var displayText = function(string){
   var displayBlock = document.getElementById('display-area')
   displayBlock.innerHTML = string 
 }
-
-
-//WORK BREAK TOGGLE FUNCTION 
-
-
-
-
-
