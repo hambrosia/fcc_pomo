@@ -1,125 +1,140 @@
-var workSeconds = 0;
+var workSeconds = 0; //ONLY GLOBAL VARIABLE, USED TO STORE TOTAL TIME WORKED BETWEEN SESSIONS 
 
+//START BUTTON CLICK / TOUCH HANDLER
 var startButton = document.getElementById('start-button')
-var startTimer = function(){
+var startTimer = function () {
   timer(userDuration())
 }
-startButton.addEventListener('click', startTimer )
-startButton.addEventListener('touchstart', startTimer )
+startButton.addEventListener('click', startTimer)
+startButton.addEventListener('touchstart', startTimer)
 
+
+//RADIO TIME SELECTION HANDLER
+var displayText = function (string) {
+  var displayBlock = document.getElementById('display-area')
+  displayBlock.innerHTML = string
+}
 
 var rads = document.getElementById("rad-buttons")
-var userDuration = function(){  
-  for (var elem of rads){
-    if(elem.checked){
+var userDuration = function () {
+  for (var elem of rads) {
+    if (elem.checked) {
       displayText(elem.value + ' mins')
-      return elem.value * 60000 
+      return elem.value * 60000
     }
   }
 }
 rads.addEventListener('change', userDuration)
 
 
+//RAD BREAK SELECTION HANDLER
 var breakRads = document.getElementById("break-rads")
-var workOrBreak = function(){  
-  for (var elem of breakRads){
-    if(elem.checked){
-      return elem.value 
+var workOrBreak = function () {
+  for (var elem of breakRads) {
+    if (elem.checked) {
+      return elem.value
     }
   }
 }
 breakRads.addEventListener('change', workOrBreak)
 
-var getTimeInSeconds = function(){
+// FUNCTION TO TIMESTAMP START OF TIMER IN SECONDS
+var getTimeInSeconds = function () {
   var currentTime = new Date()
-  currentTime = currentTime.getTime() 
+  currentTime = currentTime.getTime()
   return Math.floor(currentTime / 1000)
 }
 
+//MAIN TIMER FUNCTION
+var timer = function (duration) {
 
-var timer = function(duration){
-  
-  startButton.innerHTML = 'pause'  
-  
   var running = true
   var startTime = getTimeInSeconds()
-  var endTime = startTime + (duration/1000)
+  var endTime = startTime + (duration / 1000)
 
-  startButton.onclick = () => running = !running
-  startButton.addEventListener('touchstart', () => running = !running, false )
 
-  var resetButton = document.getElementById("reset")   
-  resetButton.onclick = function() {
-    resetSession()
+  //RECONFIGURE START BUTTON TO BE A PAUSE BUTTON
+  startButton.innerHTML = 'pause'
+  var toggleRunning = function () {
+    running = !running
   }
+  startButton.removeEventListener('click', startTimer)
+  startButton.removeEventListener('touchstart', startTimer)
+  startButton.addEventListener('click', toggleRunning)
+  startButton.addEventListener('touchstart', toggleRunning)
 
-  resetButton.addEventListener('touchstart', function() {
-    resetSession()
-  } , false )
-
-  //RESET
-  var resetSession = function(){
-    window.clearInterval(timerInterval)      
+  //ADD RESET BUTTON FUNCTIONALITY
+  var resetButton = document.getElementById("reset")
+  var resetSession = function () {
+    window.clearInterval(timerInterval)
     startButton.innerHTML = 'start'
     displayText('restart')
     startButton.onclick = () => timer(userDuration())
-    startButton.addEventListener('touchstart',startTimer, false )
+    startButton.addEventListener('touchstart', startTimer, false)
   }
+  resetButton.addEventListener('click', resetSession)
+  resetButton.addEventListener('touchstart', resetSession)
 
-  
+  //UPDATE DISPLAY AND CHECK TIME WHILE TIMER IS RUNNING 
+  var timerInterval = window.setInterval(function () {
 
-  var timerInterval = window.setInterval(function(){
     var currentTime = getTimeInSeconds()
-    //PAUSE
-    if(!running){
+
+    //CHECK FOR PAUSE
+    //new timer will be prepared with remaining time on pause
+    var timerRemainingTime = function () {
+      timer(remainingTime)
+    }
+    //pause button will return to start button functionality
+    if (!running) {
       window.clearInterval(timerInterval)
       startButton.innerHTML = 'start'
-      var remainingTime = ( endTime - currentTime + 1 ) * 1000
-      startButton.onclick = () => timer(remainingTime)
-      startButton.addEventListener('click', timerRemainingTime, false)
+      var remainingTime = (endTime - currentTime + 1) * 1000
+      startButton.removeEventListener('click', toggleRunning)
+      startButton.removeEventListener('touchstart', toggleRunning)
+      startButton.addEventListener('click', timerRemainingTime)
+      startButton.addEventListener('touchstart', timerRemainingTime)
+
       return null
     }
 
-    var timerRemainingTime = function(){
-      timer(remainingTime)
-    }
-
+    //CHECK FOR TIME IS UP
     displayCountdown(endTime)
-    //END
-    if ( currentTime == endTime ) {
-      if(workOrBreak() == 'work') {
+    if (currentTime == endTime) {
+      if (workOrBreak() == 'work') {
         workSeconds += duration / 1000
         var workTime = toHourMin(workSeconds) + ' worked'
         displayText(workTime)
       }
-      if(workOrBreak() == 'break') {
-        displayText( 'end break')
+      if (workOrBreak() == 'break') {
+        displayText('end break')
       }
-      
+
       startButton.innerHTML = 'start'
       beep()
-      //handle work or break
-      
+
       window.clearInterval(timerInterval)
-      startButton.onclick = () => timer(userDuration())
-      startButton.addEventListener('touchstart', startTimer, false )
-      
+      startButton.removeEventListener('click', timerRemainingTime)
+      startButton.removeEventListener('touchstart', timerRemainingTime)
+      startButton.addEventListener('click', startTimer)
+      startButton.addEventListener('touchstart', startTimer)
+
       return null
     }
-  } , 1000)
+  }, 1000)
 }
 
-var beep = function(){
+var beep = function () {
   var beep_audio = new Audio('beep.mp3')
   beep_audio.play()
 }
 
-var toHourMin = function(secondsWorked){
+var toHourMin = function (secondsWorked) {
   var hours = Math.floor(secondsWorked / 3600)
   var minutes = Math.floor(secondsWorked % 3600) / 60
   var time = ''
 
-  if (minutes < 10){
+  if (minutes < 10) {
     minutes = minutes.toString()
     minutes = '0' + minutes
   }
@@ -127,25 +142,20 @@ var toHourMin = function(secondsWorked){
   return time
 }
 
-var displayCountdown = function(endTime){
-  
+var displayCountdown = function (endTime) {
+
   var currentTime = getTimeInSeconds()
   var remainingTime = endTime - currentTime
-  
+
   remainingMinutes = Math.floor(remainingTime / 60)
   remainingSeconds = Math.floor(remainingTime % 60)
 
-  if (remainingSeconds < 10){
+  if (remainingSeconds < 10) {
     remainingSeconds = remainingSeconds.toString()
     remainingSeconds = '0' + remainingSeconds
   }
 
   var displayBlock = document.getElementById('display-area')
-  displayBlock.innerHTML = remainingMinutes + ":" + remainingSeconds 
-}
-
-var displayText = function(string){
-  var displayBlock = document.getElementById('display-area')
-  displayBlock.innerHTML = string 
+  displayBlock.innerHTML = remainingMinutes + ":" + remainingSeconds
 }
 
