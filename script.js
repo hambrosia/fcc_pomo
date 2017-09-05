@@ -49,7 +49,6 @@ window.onload = function () {
 
   //MAIN TIMER FUNCTION
   var timer = function (duration) {
-    console.log("timer ran")
     
     var running = true;
     var startTime = getTimeInSeconds();
@@ -63,8 +62,12 @@ window.onload = function () {
     }
     startButton.removeEventListener('click', startTimer);
     startButton.removeEventListener('touchstart', startTimer);
-    // NEED TO REMOVE THE PAUSE EVENT LISTENER HERE (timerRemainingTime)
-    
+    // NEED TO REMOVE THE PAUSE EVENT LISTENER HERE (timerRemainingTime) SINCE THERE IS NO WAY TO SEE IF THE EVENT LISTENER IS ATTACHED
+    //AKA IF IT IS THE FIRST TIME THE PAUSE BUTTON HAS BEEN PRESSED, ALL EVENT LISTENERS MUST BE REMOVED
+    //THUS THE NODE IS CLONED AND REPLACED WITH ITS CLONE AND THE CLONE IS RENAMED AS THE ORIGINAL TO PRESERVE THE FUNCTIONALITY
+    startButtonClone = startButton.cloneNode(true);
+    startButton.parentNode.replaceChild(startButtonClone, startButton);
+    startButton = document.getElementById('start-button');
     startButton.addEventListener('click', toggleRunning);
     startButton.addEventListener('touchstart', toggleRunning);
     
@@ -89,7 +92,6 @@ window.onload = function () {
       //CHECK FOR PAUSE
       //new timer will be prepared with remaining time on pause
       var timerRemainingTime = function () {
-        console.log("timerRemainingTime ran")
         timer(remainingTime);
       }
       //pause button will return to start button functionality
