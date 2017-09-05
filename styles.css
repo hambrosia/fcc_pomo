@@ -16,6 +16,7 @@ button{
 
   #pomo-display{
       border-style: dashed;
+      border-width: 7px;
       border-color: crimson;
       margin: auto;
       width: 300px;

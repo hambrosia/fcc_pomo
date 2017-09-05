@@ -40,7 +40,7 @@ window.onload = function () {
   }
   breakRads.addEventListener('change', workOrBreak);
 
-  // FUNCTION TO TIMESTAMP START OF TIMER IN SECONDS
+  // FUNCTION TO GET CURRENT TIME
   var getTimeInSeconds = function () {
     var currentTime = new Date();
     currentTime = currentTime.getTime();
@@ -49,7 +49,8 @@ window.onload = function () {
 
   //MAIN TIMER FUNCTION
   var timer = function (duration) {
-
+    console.log("timer ran")
+    
     var running = true;
     var startTime = getTimeInSeconds();
     var endTime = startTime + (duration / 1000);
@@ -62,8 +63,11 @@ window.onload = function () {
     }
     startButton.removeEventListener('click', startTimer);
     startButton.removeEventListener('touchstart', startTimer);
+    // NEED TO REMOVE THE PAUSE EVENT LISTENER HERE (timerRemainingTime)
+    
     startButton.addEventListener('click', toggleRunning);
     startButton.addEventListener('touchstart', toggleRunning);
+    
 
     //ADD RESET BUTTON FUNCTIONALITY
     var resetButton = document.getElementById("reset");
@@ -85,6 +89,7 @@ window.onload = function () {
       //CHECK FOR PAUSE
       //new timer will be prepared with remaining time on pause
       var timerRemainingTime = function () {
+        console.log("timerRemainingTime ran")
         timer(remainingTime);
       }
       //pause button will return to start button functionality
