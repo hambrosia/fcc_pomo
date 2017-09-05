@@ -1,8 +1,14 @@
-var rads = document.getElementById("rad-buttons")
-var resetButton = document.getElementById("reset") 
-var breakRads = document.getElementById("break-rads")
 var workSeconds = 0;
 
+var startButton = document.getElementById('start-button')
+var startTimer = function(){
+  timer(userDuration())
+}
+startButton.addEventListener('click', startTimer )
+startButton.addEventListener('touchstart', startTimer )
+
+
+var rads = document.getElementById("rad-buttons")
 var userDuration = function(){  
   for (var elem of rads){
     if(elem.checked){
@@ -11,7 +17,10 @@ var userDuration = function(){
     }
   }
 }
+rads.addEventListener('change', userDuration)
 
+
+var breakRads = document.getElementById("break-rads")
 var workOrBreak = function(){  
   for (var elem of breakRads){
     if(elem.checked){
@@ -19,19 +28,7 @@ var workOrBreak = function(){
     }
   }
 }
-
-breakRads.onchange = workOrBreak 
-rads.onchange = userDuration
-
-var startButton = document.getElementById('start-pause')
-
-//startButton.onclick = () => timer(userDuration())
-startButton.addEventListener('click touchend', startTimer , false )
-
-var startTimer = function(){
-  timer(userDuration())
-}
-
+breakRads.addEventListener('change', workOrBreak)
 
 var getTimeInSeconds = function(){
   var currentTime = new Date()
@@ -41,7 +38,6 @@ var getTimeInSeconds = function(){
 
 
 var timer = function(duration){
-  alert('timer started')
   
   startButton.innerHTML = 'pause'  
   
@@ -51,7 +47,8 @@ var timer = function(duration){
 
   startButton.onclick = () => running = !running
   startButton.addEventListener('touchstart', () => running = !running, false )
-  
+
+  var resetButton = document.getElementById("reset")   
   resetButton.onclick = function() {
     resetSession()
   }
@@ -151,3 +148,4 @@ var displayText = function(string){
   var displayBlock = document.getElementById('display-area')
   displayBlock.innerHTML = string 
 }
+
