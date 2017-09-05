@@ -14,18 +14,11 @@ button{
 }
 
 
-input[type=radio]:not(old){
-    width   : 28px;
-    margin  : 20px;
-    padding : 10px;
-    opacity : 1;
-  }
-
   #pomo-display{
       border-style: dashed;
       border-color: crimson;
       margin: auto;
-      width: 350px;
+      width: 320px;
       background-color: whitesmoke;
       padding: 20px;
   }
