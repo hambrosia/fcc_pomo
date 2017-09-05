@@ -3,6 +3,9 @@ var resetButton = document.getElementById("reset")
 var breakRads = document.getElementById("break-rads")
 var workSeconds = 0;
 
+//testing mobile js
+alert('js is working')
+
 var userDuration = function(){  
   for (var elem of rads){
     if(elem.checked){
@@ -29,6 +32,7 @@ startButton.onclick = () => timer(userDuration())
 startButton.addEventListener('touchend', startTimer , false )
 
 var startTimer = function(){
+  alert('user clicked start')
   timer(userDuration())
 }
 
