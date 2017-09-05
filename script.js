@@ -25,8 +25,8 @@ rads.onchange = userDuration
 
 var startButton = document.getElementById('start-pause')
 
-startButton.onclick = () => timer(userDuration())
-startButton.addEventListener('touchend', startTimer , false )
+//startButton.onclick = () => timer(userDuration())
+startButton.addEventListener('click touchend', startTimer , false )
 
 var startTimer = function(){
   timer(userDuration())
